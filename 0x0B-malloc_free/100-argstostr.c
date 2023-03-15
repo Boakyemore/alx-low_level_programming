@@ -1,66 +1,62 @@
+#include <stdlib.h>
 #include "main.h"
 
 /**
- * _isspace - check if a character is whitespace
- * @c: the character to check
+ * _strlen - returns the length of a string
+ * @s: string we find the length of
  *
- * Return: 1 is c is a whitespace character, otherwise 0
+ * Return: length of the string
  */
-int _isspace(int c)
+
+int _strlen(char *s)
 {
-	if (c == 0x20 || (c >= 0x09 && c <= 0x0d))
-		return (1);
-	return (0);
+	int x = 0;
+
+	while (*(s + x) != '\0')
+		x++;
+	return (x);
 }
 
-
 /**
- * strtow - split a string into words
- * @str: a pointer to the string to split
+ * argstostr - concatenates all the arguments of the program
+ * @ac: number of arguments
+ * @av: array of arguments
  *
- * Return: NULL if memory allocation fails or if str is NULL or empty (""),
- * otherwise return a pointer to the array of words terminated by a NULL
+ * Return: returns a pointer to the concatenated string
  */
-char **strtow(char *str)
-{
-	char **words, *pos = str;
-	int w = 0, c;
 
-	if (!(str && *str))
+char *argstostr(int ac, char **av)
+{
+	int x, y, z, length;
+	char *s;
+
+	length = 1;
+	z = 0;
+
+	if (ac == 0 || av == NULL)
 		return (NULL);
-	do {
-		while (_isspace(*pos))
-			++pos;
-		if (!*pos)
-			break;
-		while (*(++pos) && !_isspace(*pos))
-			;
-	} while (++w, *pos);
-	if (!w)
+
+	for (x = 0; x < ac; x++)
+	{
+		length += _strlen(av[x]) + 1;
+	}
+
+	s = malloc(sizeof(char) * length);
+	if (s == NULL)
+	{
 		return (NULL);
-	words = (char **) malloc(sizeof(char *) * (w + 1));
-	if (!words)
-		return (NULL);
-	w = 0, pos = str;
-	do {
-		while (_isspace(*pos))
-			++pos;
-		if (!*pos)
-			break;
-		for (str = pos++; *pos && !_isspace(*pos); ++pos)
-			;
-		words[w] = (char *) malloc(sizeof(char) * (pos - str + 1));
-		if (!words[w])
+	}
+
+	for (x = 0; x < ac; x++)
+	{
+		for (y = 0; y < _strlen(av[x]); y++)
 		{
-			while (w >  0)
-				free(words[--w]);
-			free(words);
-			return (NULL);
+			s[z] = av[x][y];
+			z++;
 		}
-		for (c = 0; str < pos; ++c, ++str)
-			words[w][c] = *str;
-		words[w][c] = '\0';
-	} while (++w, *pos);
-	words[w] = NULL;
-	return (words);
+		s[z] = '\n';
+		z++;
+	}
+	s[z] = '\0';
+	return (s);
 }
