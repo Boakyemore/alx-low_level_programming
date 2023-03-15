@@ -1,45 +1,66 @@
-#include <stdlib.h>
 #include "main.h"
 
 /**
-* *argstostr - concatenates all the arguments of the program
-* @ac: number of arguments
-* @av: array of arguments
-*
-* Return: Pointer to the new string (Success), NULL (Error)
-*/
-char *argstostr(int ac, char **av)
+ * _isspace - check if a character is whitespace
+ * @c: the character to check
+ *
+ * Return: 1 is c is a whitespace character, otherwise 0
+ */
+int _isspace(int c)
 {
-	int i, j, k, len;
-	char *str;
+	if (c == 0x20 || (c >= 0x09 && c <= 0x0d))
+		return (1);
+	return (0);
+}
 
-	if (ac == 0 || av == NULL)
+
+/**
+ * strtow - split a string into words
+ * @str: a pointer to the string to split
+ *
+ * Return: NULL if memory allocation fails or if str is NULL or empty (""),
+ * otherwise return a pointer to the array of words terminated by a NULL
+ */
+char **strtow(char *str)
+{
+	char **words, *pos = str;
+	int w = 0, c;
+
+	if (!(str && *str))
 		return (NULL);
-
-	for (i = 0; i < ac; i++)
-	{
-		for (j = 0; av[i][j] != '\0'; j++)
-			len++;
-		len++;
-	}
-
-	str = malloc(sizeof(char) * (len + 1));
-
-	if (str == NULL)
+	do {
+		while (_isspace(*pos))
+			++pos;
+		if (!*pos)
+			break;
+		while (*(++pos) && !_isspace(*pos))
+			;
+	} while (++w, *pos);
+	if (!w)
 		return (NULL);
-
-	k = 0;
-
-	for (i = 0; i < ac; i++)
-	{
-		for (j = 0; av[i][j] != '\0'; j++)
+	words = (char **) malloc(sizeof(char *) * (w + 1));
+	if (!words)
+		return (NULL);
+	w = 0, pos = str;
+	do {
+		while (_isspace(*pos))
+			++pos;
+		if (!*pos)
+			break;
+		for (str = pos++; *pos && !_isspace(*pos); ++pos)
+			;
+		words[w] = (char *) malloc(sizeof(char) * (pos - str + 1));
+		if (!words[w])
 		{
-			str[k] = av[i][j];
-			k++;
+			while (w >  0)
+				free(words[--w]);
+			free(words);
+			return (NULL);
 		}
-		str[k] = '\n';
-		k++;
-	}
-	
-	return (str);
+		for (c = 0; str < pos; ++c, ++str)
+			words[w][c] = *str;
+		words[w][c] = '\0';
+	} while (++w, *pos);
+	words[w] = NULL;
+	return (words);
 }
