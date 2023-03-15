@@ -1,57 +1,21 @@
-#include <stdio.h>
-		
-#include <stdlib.h>
-		
 #include "main.h"
-		
+#include <stdlib.h>
+
 /**
-		
- * _strdup - duplicate to new memory space location
-		
- * @str: char
-		
- * Return: 0
-		
+ * *create_array - creates an array of chars, and initializes
+ *  it with a specific char.
+ *  @c: char to initialize
+ *  @size: number of bytes to allocate
+ *
+ *  Return: a pointer to the array or null if it fails
  */
-		
-char *_strdup(char *str)
-		
+char *create_array(unsigned int size, char c)
 {
-		
-	char *aaa;
-		
-	int i, r = 0;
-		
+	char *array = malloc(size);
 
-		
-	if (str == NULL)
-		
+	if (size == 0 || array == 0)
 		return (NULL);
-		
-	i = 0;
-		
-	while (str[i] != '\0')
-		
-		i++;
-		
-
-		
-	aaa = malloc(sizeof(char) * (i + 1));
-		
-
-		
-	if (aaa == NULL)
-		
-		return (NULL);
-		
-
-		
-	for (r = 0; str[r]; r++)
-		
-		aaa[r] = str[r];
-		
-
-		
-	return (aaa);
-		
+	while (size--)
+		array[size] = c;
+	return (array);
 }
