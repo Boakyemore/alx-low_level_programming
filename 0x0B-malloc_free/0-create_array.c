@@ -1,15 +1,19 @@
-#include "bootcamp.h"
+#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
 /**
- * malloc_checked - allocates memory using malloc
- * @b: unsigned int of amount of needed memory
- * Return: void
+ * *malloc_checked - allocate memory with malloc
+ * @b: unsigned int type
+ * Return: return pointer
  */
 void *malloc_checked(unsigned int b)
 {
-	void *p;
+	int *ptr;
 
-	p = malloc(b);
-	if (p == NULL)
+	ptr = malloc(b);
+	if (ptr == NULL)
 		exit(98);
-	return (p);
+	return (ptr);
 }
