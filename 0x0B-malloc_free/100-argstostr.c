@@ -1,79 +1,62 @@
-#include "main.h"
-		
 #include <stdlib.h>
-		
+#include "main.h"
+
 /**
-		
- * argstostr - main entry
-		
- * @ac: int input
-		
- * @av: double pointer array
-		
- * Return: 0
-		
+ * _strlen - returns the length of a string
+ * @s: string we find the length of
+ *
+ * Return: length of the string
  */
-		
-char *argstostr(int ac, char **av)
-		
+
+int _strlen(char *s)
 {
-		
-	int i, n, r = 0, l = 0;
-		
-	char *str;
-		
+	int x = 0;
 
-		
+	while (*(s + x) != '\0')
+		x++;
+	return (x);
+}
+
+/**
+ * argstostr - concatenates all the arguments of the program
+ * @ac: number of arguments
+ * @av: array of arguments
+ *
+ * Return: returns a pointer to the concatenated string
+ */
+
+char *argstostr(int ac, char **av)
+{
+	int x, y, z, length;
+	char *s;
+
+	length = 1;
+	z = 0;
+
 	if (ac == 0 || av == NULL)
-		
 		return (NULL);
-		
 
-		
-	for (i = 0; i < ac; i++)
-		
+	for (x = 0; x < ac; x++)
 	{
-		
-		for (n = 0; av[i][n]; n++)
-		
-			l++;
-		
+		length += _strlen(av[x]) + 1;
 	}
-		
-	l += ac;
-		
 
-		
-	str = malloc(sizeof(char) * l + 1);
-		
-	if (str == NULL)
-		
+	s = malloc(sizeof(char) * length);
+	if (s == NULL)
+	{
 		return (NULL);
-		
-	for (i = 0; i < ac; i++)
-		
-	{
-		
-	for (n = 0; av[i][n]; n++)
-		
-	{
-		
-		str[r] = av[i][n];
-		
-		r++;
-		
 	}
-		
-	if (str[r] == '\0')
-		
+
+	for (x = 0; x < ac; x++)
 	{
-		
-		str[r++] = '\n';
-		
+		for (y = 0; y < _strlen(av[x]); y++)
+		{
+			s[z] = av[x][y];
+			z++;
+		}
+		s[z] = '\n';
+		z++;
 	}
-		
-	}
-		
-	return (str);
-		
+	s[z] = '\0';
+	return (s);
 }
